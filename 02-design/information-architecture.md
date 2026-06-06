@@ -2,10 +2,9 @@
 
 ## Primary Areas
 
-- Calendar
-- Tasks
 - Today
-- Search
+- Tasks
+- Calendar
 - Settings
 
 ## Calendar Views
@@ -17,16 +16,18 @@
 
 ## Item Types
 
-- Event
 - Task
-- Routine
-- Memo
+- Schedule
 
 ## Draft Navigation
 
-- Today: 오늘의 일정과 할 일
-- Calendar: 시간 기반 일정 탐색
-- Tasks: 완료 중심 할 일 관리
-- Search: 일정, 할 일, 메모 검색
+- Today: 오늘의 할일
+- Tasks: 전체 할일 관리
+- Calendar: 시간 조건 기반 탐색
 - Settings: 계정, 동기화, 알림, 표시 설정
 
+## Deferred Areas
+
+- Search: 할일과 메모 검색
+- Routine: 반복 할일
+- Memo: 독립 메모

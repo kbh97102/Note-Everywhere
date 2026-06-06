@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>noteEveryWhere - Task Edit</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --line: #d9dee8;
+      --line-strong: #c4ccd8;
+      --text: #172033;
+      --muted: #687385;
+      --blue: #2563eb;
+      --blue-soft: #eaf1ff;
+      --green: #0f8a63;
+      --green-soft: #e8f7f1;
+      --amber: #b7791f;
+      --amber-soft: #fff6df;
+      --shadow: 0 18px 55px rgba(26, 36, 58, 0.16);
+      --modal-shadow: 0 28px 90px rgba(15, 23, 42, 0.28);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #eef1f5 0%, #f8fafc 42%, #eef2f6 100%);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .desktop {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .window {
+      position: relative;
+      width: min(1240px, 100%);
+      height: min(820px, calc(100vh - 56px));
+      min-height: 680px;
+      display: grid;
+      grid-template-rows: 48px 1fr;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid rgba(128, 139, 156, 0.42);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .titlebar {
+      display: grid;
+      grid-template-columns: 160px 1fr 220px;
+      align-items: center;
+      gap: 16px;
+      padding: 0 16px;
+      background: rgba(248, 250, 252, 0.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(20px);
+    }
+
+    .traffic {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .dot.red { background: #ff5f57; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #28c840; }
+
+    .title {
+      justify-self: center;
+      font-size: 13px;
+      font-weight: 650;
+      color: #3f4b5f;
+    }
+
+    .toolbar {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-button,
+    .primary-button {
+      height: 30px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: #fff;
+      color: #334155;
+    }
+
+    .icon-button {
+      width: 32px;
+    }
+
+    .primary-button {
+      padding: 0 11px;
+      background: var(--blue);
+      border-color: #1d55d7;
+      color: #fff;
+      font-weight: 650;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 236px minmax(460px, 1fr) 332px;
+      min-height: 0;
+      filter: blur(1px);
+      opacity: 0.58;
+      pointer-events: none;
+    }
+
+    .sidebar {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 18px;
+      padding: 18px 14px;
+      background: #eef2f6;
+      border-right: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 8px;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #172033;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .brand-meta,
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .calendar-chip,
+    .sync-box,
+    .field-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .calendar-chip {
+      padding: 12px;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 9px;
+      border-radius: 7px;
+      color: #334155;
+      font-size: 13px;
+    }
+
+    .nav-item.active {
+      background: #fff;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .sync-box {
+      padding: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      min-width: 0;
+      background: var(--surface);
+    }
+
+    .content-header {
+      padding: 22px 26px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 6px 0 0;
+      font-size: 28px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .summary-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .summary {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-soft);
+      color: #475569;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: auto;
+      gap: 14px;
+      align-items: center;
+      justify-content: end;
+      padding: 14px 26px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .schedule {
+      padding: 18px 26px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns: 76px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      min-height: 74px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .event.selected {
+      border-color: #8fb4ff;
+      background: var(--blue-soft);
+      box-shadow: inset 3px 0 0 var(--blue);
+    }
+
+    .time {
+      color: #334155;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .event-title {
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .event-meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tag {
+      height: 24px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .detail {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      padding: 22px;
+      background: #f7f9fc;
+      border-left: 1px solid var(--line);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 48px 0 0;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      background: rgba(15, 23, 42, 0.18);
+      backdrop-filter: blur(2px);
+    }
+
+    .modal {
+      width: min(560px, 100%);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      max-height: min(720px, calc(100vh - 120px));
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.58);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: var(--modal-shadow);
+    }
+
+    .modal-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .modal-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .close-button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: #475569;
+      font-size: 18px;
+    }
+
+    .form {
+      overflow: auto;
+      display: grid;
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .label-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    label,
+    .field-label {
+      color: #263244;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .required {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .text-input,
+    .textarea,
+    .date-input {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      outline: 0;
+    }
+
+    .text-input,
+    .date-input {
+      height: 38px;
+      padding: 0 11px;
+    }
+
+    .textarea {
+      min-height: 104px;
+      resize: vertical;
+      padding: 10px 11px;
+      line-height: 1.5;
+    }
+
+    .text-input:focus,
+    .textarea:focus,
+    .date-input:focus {
+      border-color: #8fb4ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #edf1f5;
+    }
+
+    .segment {
+      height: 34px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #536073;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .segment.active {
+      background: #fff;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .secondary-action,
+    .save-action {
+      height: 36px;
+      min-width: 92px;
+      border-radius: 7px;
+      font-weight: 750;
+    }
+
+    .secondary-action {
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: #334155;
+    }
+
+    .save-action {
+      border: 1px solid #1d55d7;
+      background: var(--blue);
+      color: #fff;
+    }
+
+
+    @media (max-width: 860px) {
+      .desktop {
+        padding: 0;
+      }
+
+      .window {
+        width: 100%;
+        height: 100vh;
+        min-height: 0;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .app {
+        grid-template-columns: 72px minmax(0, 1fr);
+      }
+
+      .detail {
+        display: none;
+      }
+
+      .modal {
+        max-height: calc(100vh - 80px);
+      }
+
+      .schedule-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="desktop">
+    <section class="window" aria-label="noteEveryWhere task edit mockup">
+      <header class="titlebar">
+        <div class="traffic" aria-hidden="true">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <div class="title">noteEveryWhere</div>
+        <div class="toolbar">
+          <button class="icon-button" aria-label="이전 날짜">‹</button>
+          <button class="icon-button" aria-label="다음 날짜">›</button>
+          <button class="primary-button" aria-label="새 할일 추가">＋ 할일</button>
+        </div>
+      </header>
+
+      <div class="app" aria-hidden="true">
+        <aside class="sidebar">
+          <div class="brand">
+            <div class="brand-mark">N</div>
+            <div>
+              <div class="brand-name">noteEveryWhere</div>
+              <div class="brand-meta">Local first task planner</div>
+            </div>
+          </div>
+          <div class="calendar-chip">2026년 6월</div>
+          <nav class="nav-group">
+            <div class="nav-item active"><span>◎</span><span>Today</span><span class="muted">7</span></div>
+            <div class="nav-item"><span>▦</span><span>Calendar</span><span class="muted">24</span></div>
+            <div class="nav-item"><span>☑</span><span>Tasks</span><span class="muted">12</span></div>
+            <div class="nav-item"><span>⚙</span><span>Settings</span><span></span></div>
+          </nav>
+          <div class="sync-box">로컬 변경 2건이 대기 중입니다.</div>
+        </aside>
+
+        <section class="content">
+          <header class="content-header">
+            <div class="muted">2026년 6월 6일 토요일</div>
+            <h1>오늘 할일</h1>
+            <div class="summary-row">
+              <span class="summary">할일 5개</span>
+              <span class="summary">완료 1개</span>
+            </div>
+          </header>
+          <div class="filters">
+            <div class="summary">List</div>
+          </div>
+          <div class="schedule">
+            <article class="event selected">
+              <div class="time">09:00<br>10:00</div>
+              <div>
+                <div class="event-title">noteEveryWhere MVP 범위 정리</div>
+                <div class="event-meta">기획 문서와 홈 화면 기준 정리</div>
+              </div>
+              <span class="tag">진행 중</span>
+            </article>
+            <article class="event">
+              <div class="time">15:00<br>15:40</div>
+              <div>
+                <div class="event-title">시작기간과 마감기한 검토</div>
+                <div class="event-meta">Task 안의 schedule 규칙 확인</div>
+              </div>
+              <span class="tag">예정</span>
+            </article>
+          </div>
+        </section>
+
+        <aside class="detail">
+          <div class="field-card" style="padding: 14px;">
+            <div class="field-label">선택된 할일</div>
+            <div style="margin-top: 8px; font-weight: 800;">noteEveryWhere MVP 범위 정리</div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="overlay">
+        <section class="modal" aria-label="할일 수정">
+          <header class="modal-header">
+            <div>
+              <div class="modal-title">할일 수정</div>
+              <div class="modal-subtitle">선택된 할일의 내용을 수정합니다.</div>
+            </div>
+            <button class="close-button" aria-label="닫기">×</button>
+          </header>
+
+          <form class="form">
+            <div class="field">
+              <div class="label-row">
+                <label for="task-title">제목</label>
+                <span class="required">필수</span>
+              </div>
+              <input id="task-title" class="text-input" type="text" value="noteEveryWhere MVP 범위 정리">
+            </div>
+
+            <div class="field">
+              <div class="label-row">
+                <label for="task-memo">메모</label>
+                <span class="optional">선택</span>
+              </div>
+              <textarea id="task-memo" class="textarea">Android, iOS, macOS에서 공통으로 제공할 첫 버전의 기능 범위를 정리한다. 홈 화면과 할일 추가/수정 화면을 기준으로 MVP 범위를 확정한다.</textarea>
+            </div>
+
+            <div class="field">
+              <div class="label-row">
+                <div class="field-label">진행 정도</div>
+                <span class="required">필수</span>
+              </div>
+              <div class="segmented" role="radiogroup" aria-label="진행 정도">
+                <button class="segment" type="button" aria-pressed="false">예정</button>
+                <button class="segment active" type="button" aria-pressed="true">진행 중</button>
+                <button class="segment" type="button" aria-pressed="false">완료</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label-row">
+                <div class="field-label">일정</div>
+                <span class="optional">선택</span>
+              </div>
+              <div class="schedule-grid">
+                <div class="field">
+                  <label for="start-at">시작기간</label>
+                  <input id="start-at" class="date-input" type="datetime-local" value="2026-06-06T09:00">
+                </div>
+                <div class="field">
+                  <label for="due-at">마감기한</label>
+                  <input id="due-at" class="date-input" type="datetime-local" value="2026-06-06T10:00">
+                </div>
+              </div>
+            </div>
+
+          </form>
+
+          <footer class="modal-actions">
+            <button class="secondary-action" type="button">취소</button>
+            <button class="save-action" type="button">변경 저장</button>
+          </footer>
+        </section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
