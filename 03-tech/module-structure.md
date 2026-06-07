@@ -48,12 +48,19 @@ Compose Multiplatform 프로젝트는 기능과 계층을 함께 고려해 모�
 
 - Color token
 - Typography token
+- Shape token
 - Spacing token
+- Elevation token
+- Breakpoint token
 - Common button
 - Common text field
 - Modal/sheet base
 - Progress chip
 - Swipe action surface
+
+Theme 초안은 `03-tech/design-system.md`와 `prototypes/design-system.html`을 기준으로 합니다.
+
+Android, iOS, macOS 모두 같은 DesignSystem 모듈을 사용합니다.
 
 ### :shared:presentation:home
 
@@ -146,4 +153,3 @@ Task Create와 Task Edit은 필드 구조가 같으므로 form component를 공�
 - TaskFormActions
 
 공유하더라도 create/edit의 MVI contract는 분리합니다.
-

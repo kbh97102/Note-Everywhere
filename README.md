@@ -27,5 +27,7 @@ Android, iOS, macOS에서 사용할 수 있는 일정 관리 앱을 설계하고
 - `03-tech/development-guidelines.md`
 - `03-tech/architecture.md`
 - `03-tech/module-structure.md`
+- `03-tech/development-start-prompt.md`
+- `03-tech/design-system.md`
 
 개발 중 기존 기획서나 프로토타입을 임의로 변경하지 않습니다. 변경이 필요하면 먼저 컨펌을 받은 뒤 문서와 ADR을 수정합니다.

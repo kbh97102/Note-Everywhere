@@ -19,6 +19,8 @@ noteEveryWhere는 Compose Multiplatform으로 Android, iOS, macOS를 지원합�
 - DesignSystem 모듈 분리
 - 기능별 UI 모듈 분리
 
+Android, iOS, macOS는 하나의 DesignSystem을 공유합니다. 플랫폼별 별도 color, typography, shape 체계는 만들지 않습니다.
+
 기획서와 초안 디자인은 구현의 기준입니다. 개발 중 더 좋은 기획 방향이 떠오르더라도 기존 기획서 내용을 임의로 변경하지 않습니다.
 
 변경이 필요하면 반드시 사용자 컨펌을 받은 뒤 문서와 ADR을 수정합니다.
@@ -35,4 +37,4 @@ noteEveryWhere는 Compose Multiplatform으로 Android, iOS, macOS를 지원합�
 - 기획 변경은 구현 중 임의로 처리하지 않습니다.
 - presentation 모듈은 DesignSystem과 기능별 UI로 나뉩니다.
 - Task Create와 Task Edit은 UI form을 공유할 수 있지만 MVI contract는 분리합니다.
-
+- 플랫폼별 차이는 같은 DesignSystem token을 사용하는 adaptive layout으로 처리합니다.

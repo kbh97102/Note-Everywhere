@@ -83,6 +83,8 @@ Screen 파일은 UI 전체 구조를 읽기 쉽게 보여주는 역할만 합니
 - UI는 가능한 한 stateless composable로 유지합니다.
 - Preview 또는 sample data는 실제 도메인 로직과 분리합니다.
 - 디자인 시스템 토큰을 직접 hardcoding하지 않고 DesignSystem 모듈에서 가져옵니다.
+- Android, iOS, macOS 모두 같은 DesignSystem token을 사용합니다.
+- 플랫폼별 색상, typography, shape fork를 만들지 않습니다.
 
 ## MVI Rules
 
@@ -130,4 +132,3 @@ Milestone 1 구현 순서는 다음을 우선합니다.
 5. Task Edit modal
 6. Task Swipe Delete
 7. 로컬 저장소
-

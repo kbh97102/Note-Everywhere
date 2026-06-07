@@ -27,6 +27,8 @@
 - `03-tech/architecture.md`
 - `03-tech/module-structure.md`
 - `03-tech/development-guidelines.md`
+- `03-tech/development-start-prompt.md`
+- `03-tech/design-system.md`
 
 ## Technical Questions
 

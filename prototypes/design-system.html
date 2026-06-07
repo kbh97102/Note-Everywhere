@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>noteEveryWhere - Design System Draft</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --font-family: "Pretendard";
+
+      --background: #f4f5f7;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --surface-raised: #fbfcfe;
+      --line: #d9dee8;
+      --line-strong: #c4ccd8;
+      --text-primary: #172033;
+      --text-secondary: #334155;
+      --text-muted: #687385;
+
+      --primary: #2563eb;
+      --primary-soft: #eaf1ff;
+      --success: #0f8a63;
+      --success-soft: #e8f7f1;
+      --warning: #b7791f;
+      --warning-soft: #fff6df;
+      --danger: #d14343;
+      --danger-soft: #fff0f0;
+
+      --traffic-red: #ff5f57;
+      --traffic-yellow: #ffbd2e;
+      --traffic-green: #28c840;
+
+      --radius-xs: 4px;
+      --radius-sm: 6px;
+      --radius-md: 7px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+      --radius-pill: 999px;
+
+      --shadow-window: 0 18px 55px rgba(26, 36, 58, 0.16);
+      --shadow-modal: 0 28px 90px rgba(15, 23, 42, 0.28);
+      --shadow-selected: 0 8px 20px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-family);
+      background: linear-gradient(180deg, #eef1f5 0%, #f8fafc 42%, #eef2f6 100%);
+      color: var(--text-primary);
+    }
+
+    button,
+    input,
+    textarea {
+      font-family: var(--font-family);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 28px 56px;
+    }
+
+    .page-header {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.18;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .section {
+      display: grid;
+      gap: 16px;
+      margin-top: 26px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid.colors {
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .platform-card {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+    }
+
+    .platform-name {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .platform-rule {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    .swatch {
+      min-height: 116px;
+      display: grid;
+      align-content: space-between;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .swatch-color {
+      height: 58px;
+    }
+
+    .swatch-meta {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .token-name {
+      font-weight: 800;
+    }
+
+    .token-value {
+      color: var(--text-muted);
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 120px;
+      gap: 14px;
+      align-items: baseline;
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .type-row:first-child {
+      border-top: 0;
+    }
+
+    .type-name {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .type-spec {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .display-small { font-size: 28px; font-weight: 800; line-height: 1.18; }
+    .title-large { font-size: 22px; font-weight: 800; line-height: 1.24; }
+    .title-medium { font-size: 18px; font-weight: 800; line-height: 1.28; }
+    .title-small { font-size: 15px; font-weight: 750; line-height: 1.35; }
+    .body-medium { font-size: 14px; font-weight: 500; line-height: 1.5; }
+    .body-small { font-size: 13px; font-weight: 500; line-height: 1.5; }
+    .label-medium { font-size: 13px; font-weight: 750; line-height: 1.3; }
+    .label-small { font-size: 12px; font-weight: 700; line-height: 1.3; }
+    .caption { font-size: 11px; font-weight: 650; line-height: 1.3; }
+
+    .shape-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .shape-card {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .shape-sample {
+      height: 56px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface-soft);
+    }
+
+    .components {
+      display: grid;
+      gap: 14px;
+    }
+
+    .component-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .component-row:first-child {
+      border-top: 0;
+    }
+
+    .button {
+      height: 36px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .button.primary {
+      border-color: #1d55d7;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .button.danger {
+      border-color: #bd3838;
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .chip {
+      height: 26px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 10px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .chip.primary { color: var(--primary); background: var(--primary-soft); }
+    .chip.success { color: var(--success); background: var(--success-soft); }
+    .chip.warning { color: var(--warning); background: var(--warning-soft); }
+    .chip.danger { color: var(--danger); background: var(--danger-soft); }
+
+    .text-field {
+      width: min(320px, 100%);
+      height: 38px;
+      padding: 0 11px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: 0;
+    }
+
+    .segmented {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: #edf1f5;
+    }
+
+    .segment {
+      height: 34px;
+      min-width: 74px;
+      border: 0;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: #536073;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .segment.active {
+      background: var(--surface);
+      color: var(--text-primary);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+    }
+
+    .task-row-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--danger);
+    }
+
+    .delete-action {
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 88px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .task-row {
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: 76px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border: 1px solid #8fb4ff;
+      border-radius: var(--radius-lg);
+      background: var(--primary-soft);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+
+    .task-row.swiped {
+      transform: translateX(-88px);
+      box-shadow: var(--shadow-selected);
+    }
+
+    .task-time {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .task-title {
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .task-meta {
+      margin-top: 6px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .modal-sample {
+      max-width: 460px;
+      border: 1px solid rgba(148, 163, 184, 0.58);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      box-shadow: var(--shadow-modal);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-raised);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .modal-body {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .breakpoint-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 140px;
+      gap: 14px;
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+      align-items: center;
+    }
+
+    .breakpoint-row:first-child {
+      border-top: 0;
+    }
+
+    .breakpoint-name {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .breakpoint-range,
+    .breakpoint-usage {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 24px 16px 40px;
+      }
+
+      .type-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .breakpoint-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .type-spec {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="page-header">
+      <div class="eyebrow">noteEveryWhere Design System</div>
+      <h1>Theme Draft</h1>
+      <p class="lead">Milestone 1 화면 구현 전에 사용할 Pretendard 기반 Theme 초안입니다. Android, iOS, macOS 모두 하나의 DesignSystem을 공유하고, 플랫폼 차이는 adaptive layout으로 처리합니다.</p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Platform Policy</h2>
+      <div class="platform-grid">
+        <div class="platform-card">
+          <div class="platform-name">Android</div>
+          <div class="platform-rule">Shared token을 사용합니다. 화면 폭, system inset, sheet 표현만 조정합니다.</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name">iOS</div>
+          <div class="platform-rule">Shared token을 사용합니다. safe area와 sheet/full-screen 표현만 조정합니다.</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name">macOS</div>
+          <div class="platform-rule">Shared token을 사용합니다. window, sidebar, detail layout만 expanded 기준으로 조정합니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Colors</h2>
+      <div class="grid colors">
+        <div class="swatch"><div class="swatch-color" style="background:#f4f5f7"></div><div class="swatch-meta"><span class="token-name">Background</span><span class="token-value">#F4F5F7</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#ffffff"></div><div class="swatch-meta"><span class="token-name">Surface</span><span class="token-value">#FFFFFF</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#f8fafc"></div><div class="swatch-meta"><span class="token-name">SurfaceSoft</span><span class="token-value">#F8FAFC</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#fbfcfe"></div><div class="swatch-meta"><span class="token-name">SurfaceRaised</span><span class="token-value">#FBFCFE</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#172033"></div><div class="swatch-meta"><span class="token-name">TextPrimary</span><span class="token-value">#172033</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#687385"></div><div class="swatch-meta"><span class="token-name">TextMuted</span><span class="token-value">#687385</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#2563eb"></div><div class="swatch-meta"><span class="token-name">Primary</span><span class="token-value">#2563EB</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#eaf1ff"></div><div class="swatch-meta"><span class="token-name">PrimarySoft</span><span class="token-value">#EAF1FF</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#0f8a63"></div><div class="swatch-meta"><span class="token-name">Success</span><span class="token-value">#0F8A63</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#b7791f"></div><div class="swatch-meta"><span class="token-name">Warning</span><span class="token-value">#B7791F</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#d14343"></div><div class="swatch-meta"><span class="token-name">Danger</span><span class="token-value">#D14343</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#d9dee8"></div><div class="swatch-meta"><span class="token-name">Line</span><span class="token-value">#D9DEE8</span></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Typography</h2>
+      <div class="panel">
+        <div class="type-row"><div class="type-name">DisplaySmall</div><div class="display-small">오늘 할일</div><div class="type-spec">28 / 800</div></div>
+        <div class="type-row"><div class="type-name">TitleLarge</div><div class="title-large">noteEveryWhere MVP 범위 정리</div><div class="type-spec">22 / 800</div></div>
+        <div class="type-row"><div class="type-name">TitleMedium</div><div class="title-medium">새 할일</div><div class="type-spec">18 / 800</div></div>
+        <div class="type-row"><div class="type-name">TitleSmall</div><div class="title-small">오전</div><div class="type-spec">15 / 750</div></div>
+        <div class="type-row"><div class="type-name">BodyMedium</div><div class="body-medium">할일에 대한 구체적인 내용을 입력합니다.</div><div class="type-spec">14 / 500</div></div>
+        <div class="type-row"><div class="type-name">BodySmall</div><div class="body-small">기획 · Obsidian vault · 핵심 화면 정의</div><div class="type-spec">13 / 500</div></div>
+        <div class="type-row"><div class="type-name">LabelMedium</div><div class="label-medium">변경 저장</div><div class="type-spec">13 / 750</div></div>
+        <div class="type-row"><div class="type-name">LabelSmall</div><div class="label-small">진행 중</div><div class="type-spec">12 / 700</div></div>
+        <div class="type-row"><div class="type-name">Caption</div><div class="caption">Local first task planner</div><div class="type-spec">11 / 650</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Shapes</h2>
+      <div class="shape-list">
+        <div class="shape-card"><div class="shape-sample" style="border-radius:4px"></div><div class="token-name">Xs / 4</div></div>
+        <div class="shape-card"><div class="shape-sample" style="border-radius:6px"></div><div class="token-name">Sm / 6</div></div>
+        <div class="shape-card"><div class="shape-sample" style="border-radius:7px"></div><div class="token-name">Md / 7</div></div>
+        <div class="shape-card"><div class="shape-sample" style="border-radius:8px"></div><div class="token-name">Lg / 8</div></div>
+        <div class="shape-card"><div class="shape-sample" style="border-radius:12px"></div><div class="token-name">Xl / 12</div></div>
+        <div class="shape-card"><div class="shape-sample" style="border-radius:999px"></div><div class="token-name">Pill / 999</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Breakpoints</h2>
+      <div class="panel">
+        <div class="breakpoint-row">
+          <div class="breakpoint-name">Compact</div>
+          <div class="breakpoint-range">&lt; 600</div>
+          <div class="breakpoint-usage">phone, single column</div>
+        </div>
+        <div class="breakpoint-row">
+          <div class="breakpoint-name">Medium</div>
+          <div class="breakpoint-range">600 - 899</div>
+          <div class="breakpoint-usage">large phone, tablet compact</div>
+        </div>
+        <div class="breakpoint-row">
+          <div class="breakpoint-name">Expanded</div>
+          <div class="breakpoint-range">&gt;= 900</div>
+          <div class="breakpoint-usage">tablet, desktop, macOS window</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Components</h2>
+      <div class="panel components">
+        <div class="component-row">
+          <button class="button primary">＋ 할일</button>
+          <button class="button">취소</button>
+          <button class="button danger">삭제</button>
+        </div>
+        <div class="component-row">
+          <span class="chip primary">Focus</span>
+          <span class="chip success">완료</span>
+          <span class="chip warning">Review</span>
+          <span class="chip danger">삭제</span>
+        </div>
+        <div class="component-row">
+          <input class="text-field" value="noteEveryWhere MVP 범위 정리">
+          <div class="segmented">
+            <button class="segment">예정</button>
+            <button class="segment active">진행 중</button>
+            <button class="segment">완료</button>
+          </div>
+        </div>
+        <div class="component-row">
+          <div class="task-row-shell" style="width:min(620px,100%)">
+            <div class="delete-action">삭제</div>
+            <div class="task-row swiped">
+              <div class="task-time">09:00<br>10:00</div>
+              <div>
+                <div class="task-title">noteEveryWhere MVP 범위 정리</div>
+                <div class="task-meta">기획 · Obsidian vault · 핵심 화면 정의</div>
+              </div>
+              <span class="chip primary">Focus</span>
+            </div>
+          </div>
+        </div>
+        <div class="component-row">
+          <div class="modal-sample">
+            <div class="modal-header">
+              <div class="modal-title">할일 수정</div>
+            </div>
+            <div class="modal-body">
+              <input class="text-field" value="noteEveryWhere MVP 범위 정리">
+              <div class="segmented">
+                <button class="segment">예정</button>
+                <button class="segment active">진행 중</button>
+                <button class="segment">완료</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
